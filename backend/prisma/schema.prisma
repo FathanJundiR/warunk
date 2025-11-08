@@ -15,24 +15,45 @@ datasource db {
 }
 
 model User {
-  id          Int    @id @default(autoincrement())
-  firstName   String @db.VarChar(255)
-  lastName    String @db.VarChar(255)
-  username    String @db.VarChar(255)
-  email       String @unique @db.VarChar(255)
-  password    String @db.VarChar(255)
-  phoneNumber String @db.VarChar(50)
-  // addresses   Address[]
+  id          Int       @id @default(autoincrement())
+  firstName   String    @db.VarChar(255)
+  lastName    String    @db.VarChar(255)
+  username    String    @unique @db.VarChar(255)
+  email       String    @unique @db.VarChar(255)
+  password    String    @db.VarChar(255)
+  role        ROLE      @default(CLIENT)
+  phoneNumber String    @db.VarChar(50)
+  addresses   Address[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
 }
 
-// model Address {
-//   id           Int    @id @default(autoincrement())
-//   userId       Int    @unique
-//   user         User   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-//   title        String @db.VarChar(100)
-//   addressLine1 String @db.Text
-//   addressLine2 String @db.Text
-//   country      String @db.VarChar(100)
-//   postalCode   String @db.VarChar(20)
-//   phoneNumber  String @db.VarChar(500)
-// }
+model Address {
+  id           Int       @id @default(autoincrement())
+  userId       Int       @unique
+  user         User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  title        String    @db.VarChar(100)
+  addressLine1 String    @db.Text
+  addressLine2 String    @db.Text
+  country      String    @db.VarChar(100)
+  postalCode   String    @db.VarChar(20)
+  phoneNumber  String    @db.VarChar(500)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+enum ROLE {
+  ADMIN
+  STAFF
+  CLIENT
+}
